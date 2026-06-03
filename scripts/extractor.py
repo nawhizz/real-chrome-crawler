@@ -44,6 +44,14 @@ def _slugify(text: str) -> str:
     return re.sub(r"-{2,}", "-", slug).strip("-")[:60] or "page"
 
 
+def _strip_leading_h1(body: str, title: str) -> str:
+    """본문 첫 H1이 제목과 동일하면 제거(중복 방지)."""
+    match = re.match(r"\s*#\s+(.+?)\s*\n", body)
+    if match and match.group(1).strip().lower() == title.strip().lower():
+        return body[match.end() :].lstrip("\n")
+    return body
+
+
 def to_obsidian_note(
     result: PageResult, body_md: str, tags: list[str] | None = None
 ) -> str:
@@ -64,9 +72,9 @@ def to_obsidian_note(
         f"{fm_tags}\n"
         "---\n"
     )
+    body = _strip_leading_h1(body_md, result.title)
     return (
-        f"{frontmatter}\n# {result.title}\n\n"
-        f"출처: <{result.final_url}>\n\n{body_md}\n"
+        f"{frontmatter}\n# {result.title}\n\n" f"출처: <{result.final_url}>\n\n{body}\n"
     )
 
 
