@@ -34,9 +34,23 @@ Obsidian 호환 노트로 저장한다. 진짜 브라우저 세션이라 봇 차
 ## 수집 실행
 
 먼저 [references/selectors.md](references/selectors.md)에서 대상 도메인 규칙을 확인한다.
-규칙이 있으면 참고해 옵션을 정한다(예: `auto_scroll: true` → `--auto-scroll`).
+**규칙이 있으면 반드시 해당 필드를 CLI 옵션으로 변환해 붙인다.** (이 변환을 빠뜨리면
+본문 대신 페이지 전체가 추출되어 노이즈가 섞인다.)
 
-대상 URL을 `<URL>` 자리에 넣어 실행한다(직접 호출 시 `$ARGUMENTS`가 URL):
+- `content_selector: <셀렉터>` → `--content-selector "<셀렉터>"`
+- `auto_scroll: true` → `--auto-scroll`
+
+예) `n.news.naver.com`은 `content_selector: #dic_area` 규칙이 있으므로
+`--content-selector "#dic_area"`를 붙여 본문(`#dic_area`)만 추출한다.
+
+대상 URL을 `<URL>` 자리에 넣어 실행한다(직접 호출 시 `$ARGUMENTS`가 URL).
+selectors.md 규칙이 있으면 위 변환 결과를 함께 붙인다:
+
+```bash
+cd "${CLAUDE_SKILL_DIR}" && uv run python -m scripts.extractor "<URL>" [--content-selector "<셀렉터>"] [--auto-scroll]
+```
+
+규칙이 없으면 옵션 없이 실행한다(전체 body에서 노이즈 태그 제거 후 추출):
 
 ```bash
 cd "${CLAUDE_SKILL_DIR}" && uv run python -m scripts.extractor "<URL>"
@@ -48,6 +62,8 @@ cd "${CLAUDE_SKILL_DIR}" && uv run python -m scripts.extractor "<URL>"
 
 ## 옵션
 
+- 본문 셀렉터: `--content-selector "<CSS>"` (지정 시 해당 요소만 추출, 노이즈 제거에 가장 효과적.
+  예: 네이버 뉴스 `--content-selector "#dic_area"`. 미지정 시 전체 body에서 노이즈 태그만 제거)
 - 지연 로딩/무한 스크롤: `--auto-scroll`
 - robots 정책: `--robots-policy warn|block|ignore` (기본 `warn` = 경고 후 진행)
 - 포트 변경: `--port <N>` (기본 9222)
