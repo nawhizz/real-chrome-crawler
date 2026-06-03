@@ -22,4 +22,10 @@
 - auto_scroll: false
 - notes: 정적 데모 페이지. 형식 예시용.
 
+### n.news.naver.com
+- content_selector: `#dic_area` (기사 본문 영역)
+- wait_for: `#dic_area`
+- auto_scroll: false
+- notes: 본문 외 네비게이션·댓글·관련기사 등 노이즈가 많음. `#dic_area` 셀렉터로 본문만 추출 권장. robots.txt 불허(warn 정책으로 진행). 로그인 불필요.
+
 <!-- 첫 실제 사이트 검증 후 여기에 도메인 블록을 추가한다 -->

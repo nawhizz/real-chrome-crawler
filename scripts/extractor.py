@@ -29,13 +29,20 @@ NOISE_TAGS = [
 ]
 
 
-def html_to_markdown(html: str) -> str:
-    """노이즈 제거 후 본문을 Markdown으로 변환."""
+def html_to_markdown(html: str, content_selector: str | None = None) -> str:
+    """노이즈 제거 후 본문을 Markdown으로 변환. content_selector 지정 시 해당 요소만 변환."""
     soup = BeautifulSoup(html, "html.parser")
-    for tag in soup(NOISE_TAGS):
-        tag.decompose()
-    body = soup.body or soup
-    markdown = md(str(body), heading_style="ATX")
+    if content_selector:
+        root = soup.select_one(content_selector)
+        if root is None:
+            raise ValueError(
+                f"content_selector '{content_selector}' 를 찾을 수 없습니다."
+            )
+    else:
+        root = soup.body or soup
+        for tag in soup(NOISE_TAGS):
+            tag.decompose()
+    markdown = md(str(root), heading_style="ATX")
     return re.sub(r"\n{3,}", "\n\n", markdown).strip()
 
 
@@ -124,6 +131,9 @@ def main() -> int:
     parser.add_argument("--out-dir", default="output")
     parser.add_argument("--auto-scroll", action="store_true")
     parser.add_argument(
+        "--content-selector", default=None, help="본문 추출용 CSS 셀렉터"
+    )
+    parser.add_argument(
         "--robots-policy", choices=["warn", "block", "ignore"], default="warn"
     )
     args = parser.parse_args()
@@ -140,7 +150,7 @@ def main() -> int:
     with cdp_attach(info["cdp_http"]) as session:
         result = collect_page(session, args.url, auto_scroll=args.auto_scroll)
 
-    body_md = html_to_markdown(result.html)
+    body_md = html_to_markdown(result.html, content_selector=args.content_selector)
     paths = save_outputs(result, body_md, out_dir=args.out_dir)
     print(json.dumps(paths, ensure_ascii=False, indent=2))
     return 0
