@@ -1,0 +1,38 @@
+# Python-generated files
+__pycache__/
+*.py[oc]
+build/
+dist/
+wheels/
+*.egg-info
+
+# Virtual environments
+.venv
+
+# Environment variables
+.env
+.env.*
+
+# Type checker / linter caches
+.mypy_cache/
+.ruff_cache/
+
+# Test & coverage
+.pytest_cache/
+htmlcov/
+.coverage
+
+# Playwright
+playwright-report/
+test-results/
+
+# Logs
+*.log
+
+# Chrome profile copies (runtime-generated)
+user-data-dir/
+chrome-profile/
+
+# IDE
+.vscode/
+.idea/
