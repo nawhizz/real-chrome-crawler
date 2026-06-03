@@ -64,6 +64,9 @@ def _scroll_to_bottom(page: Page, max_steps: int = 30, pause_ms: int = 500) -> N
 
 
 def main() -> int:
+    from scripts.console import ensure_utf8_stdio
+
+    ensure_utf8_stdio()
     import argparse
     import json
 

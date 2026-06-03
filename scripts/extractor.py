@@ -7,16 +7,9 @@ from __future__ import annotations
 
 import json
 import re
-import sys
 from dataclasses import asdict
 from datetime import datetime, timezone
 from pathlib import Path
-
-# Windows CP949 터미널에서 한/특수문자 출력 오류 방지
-if hasattr(sys.stdout, "reconfigure"):
-    sys.stdout.reconfigure(encoding="utf-8", errors="replace")
-if hasattr(sys.stderr, "reconfigure"):
-    sys.stderr.reconfigure(encoding="utf-8", errors="replace")
 
 from bs4 import BeautifulSoup
 from markdownify import markdownify as md
@@ -115,6 +108,9 @@ def save_outputs(
 
 
 def main() -> int:
+    from scripts.console import ensure_utf8_stdio
+
+    ensure_utf8_stdio()
     import argparse
 
     from scripts.cdp_session import cdp_attach
