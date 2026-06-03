@@ -33,6 +33,9 @@ test-results/
 user-data-dir/
 chrome-profile/
 
+# 수집 결과물 (런타임 생성)
+output/
+
 # IDE
 .vscode/
 .idea/
