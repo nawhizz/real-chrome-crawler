@@ -33,6 +33,9 @@ Obsidian 호환 노트로 저장한다. 진짜 브라우저 세션이라 봇 차
 
 ## 수집 실행
 
+먼저 [references/selectors.md](references/selectors.md)에서 대상 도메인 규칙을 확인한다.
+규칙이 있으면 참고해 옵션을 정한다(예: `auto_scroll: true` → `--auto-scroll`).
+
 대상 URL을 `<URL>` 자리에 넣어 실행한다(직접 호출 시 `$ARGUMENTS`가 URL):
 
 ```bash
@@ -54,4 +57,5 @@ cd "${CLAUDE_SKILL_DIR}" && uv run python -m scripts.extractor "<URL>"
 
 - 대상 사이트의 ToS·robots.txt·개인정보/저작권 법규를 준수할 것. 회원 전용 콘텐츠
   수집은 약관 위반 소지가 있다.
-- 사이트별 본문 셀렉터·대기 전략은 [references/selectors.md](references/selectors.md)에 점증 기록한다.
+- [references/selectors.md](references/selectors.md): 수집 전 대상 도메인 규칙을 확인·적용하고,
+  새로 검증한 사이트의 본문 셀렉터·대기 전략은 같은 형식으로 추가 기록한다.
